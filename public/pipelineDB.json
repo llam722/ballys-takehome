@@ -6,5 +6,13 @@
 "current_bitrate": "3000",
 "resolution": "1080p",
 "avg_fps": "59.97"
+},
+  {
+"streamName": "eastPackager14",
+"active": true,
+"connection": true,
+"current_bitrate": "3000",
+"resolution": "1080p",
+"avg_fps": "59.97"
 }
 ]

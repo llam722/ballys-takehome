@@ -5,5 +5,12 @@
 "recordName": "sample_record",
 "recordDuration": "7213025",
 "recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager13",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
 }
 ]

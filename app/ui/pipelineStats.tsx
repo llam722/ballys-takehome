@@ -12,10 +12,10 @@ export default function PipelineStats({ streamName }: { streamName: string }) {
   const handleRecordClick = () => {
     if (recording) {
       setRecording(false);
-      fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "POST"})
+      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "POST"})
     } else {
       setRecording(true);
-      fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "DELETE"});
+      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "DELETE"});
     }
   };
 

@@ -55,7 +55,7 @@ export async function getPipelineNames(): Promise<string[]> {
 
 
 //function to query if pipeline is active
-export async function activePipelineCheck(pipelineNames: string[]): Promise<DataType[] | any>  {
+export async function activePipelineCheck(pipelineNames: string[]): Promise<any>  {
   const activePipelineArray: (DataType | Error)[] = [];
 
   //considerations: create an array to keep count of how many pipelines are in the queue
@@ -63,31 +63,10 @@ export async function activePipelineCheck(pipelineNames: string[]): Promise<Data
   //if so, we can use a queue method, but a longer load would block the shorter loads in parallel?
   //else you can keep slicing the array and querying the pipelines in parallel, but would need feedback from the server to know when the querying is done (before 200ms)
 
-  const pipelineQueue: string[] = [];
-
-
-  //iterate through the array of pipeline names and query each one with 200ms delay
   for (const name of pipelineNames) {
-
     //streamNames do not have white spacing, so no need to remove white spacing with regex
     const streamName = name.toLowerCase();
-
     try {
-      //if api requests do not exceed 5, no need to time out
-      if (pipelineNames.length > 5) {
-        //create buffer to limit api requests to 5 per second
-        await new Promise((resolve) => setTimeout(resolve, 200));
-
-        const response = await fetch('http://localhost:3000/pipelineDB.json');
-        //if 404, throw error and continue to check the rest of the pipelines
-        if (response.status === 404) {
-          activePipelineArray.push(new Error(`Pipeline ${streamName} does not exist`));
-          //continues to check the rest of the pipelines or can break if needed
-        }
-        const data = await response.json();
-        if (data[0].streamName.toLowerCase() === streamName) activePipelineArray.push(data);
-
-      } else {
         //mocked database to to emulate the api response
         const response = await fetch('http://localhost:3000/pipelineDB.json');
 
@@ -98,10 +77,8 @@ export async function activePipelineCheck(pipelineNames: string[]): Promise<Data
           break;
         }
         const data = await response.json();
-        if (data[0].streamName.toLowerCase() === streamName) activePipelineArray.push(data);
-      }
+        if (data[0].streamName.toLowerCase() === streamName && data[0].active === true) activePipelineArray.push(...data);
       
-
     } catch (error) {
       console.log('Pipeline check error for stream:', streamName, error);
       activePipelineArray.push(new Error(`Failed to check if pipeline ${streamName} is active`));
@@ -115,7 +92,6 @@ export async function activePipelineCheck(pipelineNames: string[]): Promise<Data
 export async function streamRecordCheck(activePipelines: string[]): Promise<PipelineStatsType[] | any> {
   const pipelineStatsArray: (PipelineStatsType | Error)[] = [];
 
-  //iterates through the activePipelines array and queries each one with 200ms delay
   for (const name of activePipelines) {
 
     //again, streamNames do not have white spacing, so no need to remove white spacing with regex
@@ -138,7 +114,7 @@ export async function streamRecordCheck(activePipelines: string[]): Promise<Pipe
           //continues to check the rest of the pipelines or can break if needed
         }
         const data = await response.json();
-        if (data[0].streamName.toLowerCase() === streamName) pipelineStatsArray.push(data);
+        if (data[0].streamName.toLowerCase() === streamName) pipelineStatsArray.push(...data);
 
       } else {
         //mocked database to to emulate the api response
@@ -151,7 +127,7 @@ export async function streamRecordCheck(activePipelines: string[]): Promise<Pipe
           break;
         }
         const data = await response.json();
-        if (data[0].streamName.toLowerCase() === streamName) pipelineStatsArray.push(data);
+        if (data[0].streamName.toLowerCase() === streamName) pipelineStatsArray.push(...data);
       }
 
     } catch (error) {
