@@ -15,20 +15,33 @@ export interface PipelineStatsType {
   recordStart: Date;
 }
 
+export interface database {
+  id: number;
+  name: string;
+  server_id: number;
+  server_name: string;
+  pipeline_id: number;
+}
+
 //iterate through the database to retrieve the names of the pipelines in an array
 // query each of the names to see if they are active, if so return true
 export async function getPipelineNames(): Promise<string[]> {
 
   try {
-
+    //fetch from local database
     const response = await fetch('http://localhost:3000/database.json');
     const data = await response.json();
-    
+    //create an array to store the names of the pipelines
     const pipelineNames: string[] = [];
-    for (let i = 0; i < data.length; i++) {
-      pipelineNames.push(data[i].name);
-    }
+    //regex to remove white spacing
+    const regex = /\s/g;
 
+    for (let i = 0; i < data.length; i++) {
+      //name in database doesn't match the name in streamNames, so need to modify for consistency
+      //converts all pipeline names to lowercase for consistency and remove white spacing
+      const name = data[i].name.toLowerCase().replaceAll(regex, '');
+      pipelineNames.push(name);
+    }
     //returns an array of pipeline names
     return pipelineNames;
 
@@ -42,11 +55,23 @@ export async function getPipelineNames(): Promise<string[]> {
 
 
 //function to query if pipeline is active
-export async function activeCheck(pipelineNames: string[]): Promise<DataType[] | any>  {
+export async function activePipelineCheck(pipelineNames: string[]): Promise<DataType[] | any>  {
   const activePipelineArray: (DataType | Error)[] = [];
 
+  //considerations: create an array to keep count of how many pipelines are in the queue
+  //question to note: do all the pipelines return data at different times?
+  //if so, we can use a queue method, but a longer load would block the shorter loads in parallel?
+  //else you can keep slicing the array and querying the pipelines in parallel, but would need feedback from the server to know when the querying is done (before 200ms)
+
+  const pipelineQueue: string[] = [];
+
+
   //iterate through the array of pipeline names and query each one with 200ms delay
-  for (const streamName of pipelineNames) {
+  for (const name of pipelineNames) {
+
+    //streamNames do not have white spacing, so no need to remove white spacing with regex
+    const streamName = name.toLowerCase();
+
     try {
       //if api requests do not exceed 5, no need to time out
       if (pipelineNames.length > 5) {
@@ -55,6 +80,11 @@ export async function activeCheck(pipelineNames: string[]): Promise<DataType[] |
 
       } else {
         const data = await fetch(`http://videoserver.com/api/incomingstreams/${streamName}`)
+        if (data.status === 404) {
+          activePipelineArray.push(new Error(`Pipeline ${streamName} does not exist`));
+          //continues to check the rest of the pipelines
+          continue;
+        }
         const response = await data.json();
         activePipelineArray.push(response);
       }
@@ -62,16 +92,22 @@ export async function activeCheck(pipelineNames: string[]): Promise<DataType[] |
     } catch (error) {
       console.log('Pipeline check error for stream:', streamName, error);
       activePipelineArray.push(new Error(`Failed to check if pipeline ${streamName} is active`));
+      throw new Error('Error 404: Pipeline does not exist', )
     }
   }
   return activePipelineArray;
 }
 
 //function to check statistics of pipeline
-export async function pipelineStatsCheck(activePipelines: string[]): Promise<PipelineStatsType[] | any> {
+export async function streamRecordCheck(activePipelines: string[]): Promise<PipelineStatsType[] | any> {
   const pipelineStatsArray: (PipelineStatsType | Error)[] = [];
 
-  for (const streamName of activePipelines) {
+  //iterates through the activePipelines array and queries each one with 200ms delay
+  for (const name of activePipelines) {
+
+    //again, streamNames do not have white spacing, so no need to remove white spacing with regex
+    const streamName = name.toLowerCase();
+  
     try {
       //if api requests do not exceed 5, no need to time out
       if (activePipelines.length > 5) {
@@ -79,13 +115,16 @@ export async function pipelineStatsCheck(activePipelines: string[]): Promise<Pip
         await new Promise((resolve) => setTimeout(resolve, 200));
 
       } else {
+        
         const data = await fetch(`http://videoserver.com/api/streamRecorders/${streamName}`)
         const response = await data.json();
+
+
         pipelineStatsArray.push(response);
       }
     } catch (error) {
       console.log('Pipeline stats error for stream:', streamName, error);
-      pipelineStatsArray.push(new Error(`Failed to check recording stats for pipeline ${streamName}`));
+      pipelineStatsArray.push(new Error(`Failed to check recording stats for pipeline ${streamName}, pipeline might not be active`));
     }
   }
   return pipelineStatsArray;
