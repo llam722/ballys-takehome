@@ -78,16 +78,29 @@ export async function activePipelineCheck(pipelineNames: string[]): Promise<Data
         //create buffer to limit api requests to 5 per second
         await new Promise((resolve) => setTimeout(resolve, 200));
 
-      } else {
-        const data = await fetch(`http://videoserver.com/api/incomingstreams/${streamName}`)
-        if (data.status === 404) {
+        const response = await fetch('http://localhost:3000/pipelineDB.json');
+        //if 404, throw error and continue to check the rest of the pipelines
+        if (response.status === 404) {
           activePipelineArray.push(new Error(`Pipeline ${streamName} does not exist`));
-          //continues to check the rest of the pipelines
-          continue;
+          //continues to check the rest of the pipelines or can break if needed
         }
-        const response = await data.json();
-        activePipelineArray.push(response);
+        const data = await response.json();
+        if (data[0].streamName.toLowerCase() === streamName) activePipelineArray.push(data);
+
+      } else {
+        //mocked database to to emulate the api response
+        const response = await fetch('http://localhost:3000/pipelineDB.json');
+
+        // const response = await fetch(`http://videoserver.com/api/incomingstreams/${streamName}`)
+        if (response.status === 404) {
+          activePipelineArray.push(new Error(`Pipeline ${streamName} does not exist`));
+          //continues to check the rest of the pipelines or can break if needed
+          break;
+        }
+        const data = await response.json();
+        if (data[0].streamName.toLowerCase() === streamName) activePipelineArray.push(data);
       }
+      
 
     } catch (error) {
       console.log('Pipeline check error for stream:', streamName, error);
@@ -114,14 +127,33 @@ export async function streamRecordCheck(activePipelines: string[]): Promise<Pipe
         //create buffer to limit api requests to 5 per second
         await new Promise((resolve) => setTimeout(resolve, 200));
 
+
+        const response = await fetch('http://localhost:3000/recordStatsDB.json');
+        // const response = await fetch(`http://videoserver.com/api/streamRecorders/${streamName}`)
+
+
+        //if 404, throw error and continue to check the rest of the pipelines
+        if (response.status === 404) {
+          pipelineStatsArray.push(new Error(`Failed to check recording stats for pipeline ${streamName}, pipeline might not be active`));
+          //continues to check the rest of the pipelines or can break if needed
+        }
+        const data = await response.json();
+        if (data[0].streamName.toLowerCase() === streamName) pipelineStatsArray.push(data);
+
       } else {
-        
-        const data = await fetch(`http://videoserver.com/api/streamRecorders/${streamName}`)
-        const response = await data.json();
+        //mocked database to to emulate the api response
+        const response = await fetch('http://localhost:3000/recordStatsDB.json');
+        // const response = await fetch(`http://videoserver.com/api/streamRecorders/${streamName}`)
 
-
-        pipelineStatsArray.push(response);
+        if (response.status === 404) {
+          pipelineStatsArray.push(new Error(`Failed to check recording stats for pipeline ${streamName}, pipeline might not be active`));
+          //continues to check the rest of the pipelines or can break if needed
+          break;
+        }
+        const data = await response.json();
+        if (data[0].streamName.toLowerCase() === streamName) pipelineStatsArray.push(data);
       }
+
     } catch (error) {
       console.log('Pipeline stats error for stream:', streamName, error);
       pipelineStatsArray.push(new Error(`Failed to check recording stats for pipeline ${streamName}, pipeline might not be active`));

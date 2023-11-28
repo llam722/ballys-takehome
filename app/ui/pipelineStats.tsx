@@ -1,5 +1,6 @@
 "use client";
 
+import { Headers } from "node-fetch";
 import { FormEvent, useState } from "react";
 
 export default function PipelineStats({ streamName }: { streamName: string }) {
@@ -11,8 +12,10 @@ export default function PipelineStats({ streamName }: { streamName: string }) {
   const handleRecordClick = () => {
     if (recording) {
       setRecording(false);
+      fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "POST"})
     } else {
       setRecording(true);
+      fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "DELETE"});
     }
   };
 
@@ -31,7 +34,7 @@ export default function PipelineStats({ streamName }: { streamName: string }) {
           }}
         />
       </div>
-      
+
       <p>{`Stream Name: ${streamName}`}</p>
       <p>{`Active: ${true}`} </p>
       <p>{`Connection: ${true}`}</p>

@@ -12,38 +12,39 @@ export default async function Pipeline() {
   //retrieves the pipeline names from the Database
   const pipelineNames = await getPipelineNames();
   //retrieves the active pipelines from the Database, along with other info
-  // const pipelineData = await activePipelineCheck(pipelineNames);
-  //grabs the active pipelines names in an array to minimize request size
-  // const activePipelines: string[] = pipelineData.map(
-  //   (pipeline: DataType) => pipeline.streamName
-  // );
+  const pipelineData = await activePipelineCheck(pipelineNames);
+  //filters the active pipelines names in an array to minimize request size
+  const activePipelines: string[] = pipelineData.map(
+    (pipeline: DataType[]) => pipeline[0].streamName
+  );
+  // console.log(pipelineData, 'pipelineData')
+  const pipelineStats = await streamRecordCheck(activePipelines);
+  console.log(pipelineStats, 'pipelineStats')
 
-  // const pipelineStats = await streamRecordCheck(activePipelines);
 
-  //states to check if the pipeline is active or not
+  // const { active, connection, current_bitrate, resolution, avg_fps }
+  //   = pipelineData;
 
-  // const [activePipeline, setActivePipeline] = useState<Boolean>(false);
-  // const [recording, setRecording] = useState<PipelineStatsType>({
-  //   streamName: '',
-  //   isRecording: false,
-  //   recordName: '',
-  //   recordDuration: 0,
-  //   recordStart: new Date(),
-  // });
+  // const {
+  //   streamName,
+  //   isRecording,
+  //   recordName,
+  //   recordDuration,
+  //   recordStart,
+  // } = pipelineStats;
 
-  //sets the maximum of 15 pipelines to be viewed at once
-  // const pipelineArray = [];
-  // for (let i = 0; i < 15; i++) {
-  //   pipelineArray.push(<Pipeline key={i} />);
-  // }
+  // console.log(active, connection, current_bitrate, resolution, avg_fps, 'pipelineData')
+  // console.log(streamName, isRecording, recordName, recordDuration, recordStart, 'pipelineStats')
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg: grid-col-3 2xl:grid-cols-4 gap-4 md:gap-8">
 
-      {pipelineNames.map((pipeline, i): JSX.Element => {
-        return <PipelineStats key={i} streamName={pipeline} />;
+      {pipelineData.map((pipeline: DataType[], i: number): JSX.Element => {
+        return <PipelineStats key={i} streamName={pipeline[i].streamName} />;
       })}
-
     </div>
   );
 }
+
+
