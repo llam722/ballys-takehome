@@ -82,27 +82,6 @@
 "server_id": 19,
 "server_name": "East Packager",
 "pipeline_id": 13
-},
-{
-"id": 2463,
-"name": "East Packager 14",
-"server_id": 19,
-"server_name": "East Packager",
-"pipeline_id": 14
-},
-{
-"id": 2464,
-"name": "East Packager 16",
-"server_id": 19,
-"server_name": "East Packager",
-"pipeline_id": 16
-},
-{
-"id": 2465,
-"name": "East Packager 16",
-"server_id": 19,
-"server_name": "East Packager",
-"pipeline_id": 16
 }
 
 ]
