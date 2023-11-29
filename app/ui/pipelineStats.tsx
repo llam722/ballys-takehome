@@ -27,10 +27,12 @@ export default function PipelineStats({
   const handleRecordClick = () => {
     if (recording) {
       if (window.confirm("Stop this recording?")) setRecording(false);
-      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "POST"})
+      //  patch request to send to videoserver to stop recording
+      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"})
     } else {
       setRecording(true);
-      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "DELETE"});
+      //  patch request to send to videoserver to start recording
+      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"});
     }
   };
 
