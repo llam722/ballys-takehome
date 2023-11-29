@@ -1,7 +1,7 @@
-
 const next = require('next');
 const express = require('express');
 const bodyParser = require('body-parser')
+const pipelineRouter = require('./routers/pipelineRouter');
 
 const hostname = 'localhost';
 const dev = process.env.NODE_ENV !== "production";
@@ -16,12 +16,12 @@ app.prepare().then(() => {
   const server = express();
   server.use(bodyParser.json());
   server.use(bodyParser.urlencoded({ extended: true }));
+  server.use('/view', pipelineRouter);
   
 
   server.get('*', (req, res) => {
     return handle(req, res);
   });
-
 
   
 
