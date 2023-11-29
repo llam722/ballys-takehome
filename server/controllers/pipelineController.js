@@ -127,7 +127,7 @@ const pipelineController = {
 
   getNewActivePipe: async (req, res, next) => {
     const first = res.locals.stats
-    console.log('API REQUEST SENT')
+    console.log('API Request sent...')
     try {
       //only need to check if the pipeline is active and not disabled from prev middleware
       if (first.active === true) {
