@@ -14,7 +14,7 @@ export const limiter = new Bottleneck({
   //maximum amount of requests that can run concurrently
   maxConcurrent: 5,
   //minimum time to wait between each request
-  minTime: 200,
+  minTime: 500,
   // How many jobs can be executed before the limiter stops executing jobs. If `reservoir` reaches `0`, no jobs will be executed until it is no longer `0`. New jobs will still be queued up.
   reservoir: 5,
   // The increment applied to `reservoir` when `reservoirIncreaseInterval` is in use.

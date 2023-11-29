@@ -35,13 +35,13 @@ export default function PipelineStats({
   //handles the record button state toggle
   const handlePipelineClick = () => {
     if (activePipeline) {
-      if (window.confirm("Stop this pipeline?")) {
+      // if (window.confirm("Stop this pipeline?")) {
         setRecording(false);
         setActivePipeline(false);
         console.log("Pipeline stopped");
 
         //  patch request to send to videoserver to stop pipeline
-        fetch(`http://localhost:3000/view/?id=${id}`, {
+        limiter.schedule(() => fetch(`http://localhost:3000/view/?id=${id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -51,15 +51,15 @@ export default function PipelineStats({
             streamName: streamName,
             active: false,
           }),
-        })
-      }
+        }))
+      // }
 
     } else {
       setActivePipeline(true);
       console.log('Pipeline started')
       
       //  patch request to send to videoserver to start pipeline
-      fetch(`http://localhost:3000/view/?id=${id}`, {
+      limiter.schedule(() => fetch(`http://localhost:3000/view/?id=${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export default function PipelineStats({
           streamName: streamName,
           active: true,
         }),
-      }).then((res) =>
+      })).then((res) =>
         res.json().then((data) => {
           setRecording(data.isRecording);
           setRecordingDuration(data.recordDuration);
