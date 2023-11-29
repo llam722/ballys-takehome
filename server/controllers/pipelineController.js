@@ -49,10 +49,11 @@ const pipelineController = {
       
       //cross references multiple pipelines from mock database
       for (let i = 0; i < data.length; i++) {
-        if (data[i].streamName.toLowerCase() === streamName && data[i].active === true) {
+        if (data[i].streamName.toLowerCase() === streamName) {
           const newData = { id: id, ...data[i] }
           activePipelineArray.push(newData);
         }
+    
       }
         
       } catch (error) {

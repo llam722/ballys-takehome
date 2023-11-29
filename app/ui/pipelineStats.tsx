@@ -19,12 +19,11 @@ export default function PipelineStats({
 }: pipelineStatistics) {
   const [disableButton, setDisableButton] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  const [recording, setRecording] = useState<boolean>(false);
+  const [recording, setRecording] = useState<boolean>(isRecording);
   const [activePipeline, setActivePipeline] = useState<boolean>(active);
 
   let recordDate;
-   recordStart ? recordDate = new Date(recordStart) : recordDate = '';
-    
+  recordStart ? recordDate = new Date(recordStart) : recordDate = '';
 
   //handles the record button state toggle
   const handlePipelineClick = () => {
@@ -36,14 +35,15 @@ export default function PipelineStats({
       //  patch request to send to videoserver to stop recording
       // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"})
     } else {
-      if (active && recording === false) {
-        setActivePipeline(true);
-        setRecording(true)
+      setActivePipeline(true);
+      if (recording === true) {
+        setRecording(false)
       };
       //  patch request to send to videoserver to start recording
       // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"});
     }
   };
+
 
   const pipelineColor = activePipeline ? "bg-red-700" : "bg-green-700";
 
@@ -67,7 +67,7 @@ export default function PipelineStats({
         {activePipeline ? "Stop Pipeline" : "Start Pipeline"}
       </button>
       <div className="mt-2">
-        {/* {//if name is not set, then display the name of the recording} */}
+        {/* if name is not set, then display the name of the recording */}
         <p>{`Recording: ${recording ? "ON" : "OFF"}`}</p>
         <h1>{`Record Name: ${name ? name : recordName}`}</h1>
         <label htmlFor="name"></label>
