@@ -6,15 +6,21 @@ import { pipelineStatistics } from "../lib/data";
 
 export default function PipelineStats({
   streamName,
+  active,
+  connection,
+  current_bitrate,
   resolution,
   avg_fps,
   recordName,
   recordDuration,
   recordStart,
+  isRecording,
 }: pipelineStatistics) {
   const [disableButton, setDisableButton] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  const [recording, setRecording] = useState<boolean>(false);
+  const [recording, setRecording] = useState<boolean>(isRecording);
+
+  const recordDate = new Date(recordStart);
 
   //handles the record button state toggle
   const handleRecordClick = () => {
@@ -32,9 +38,9 @@ export default function PipelineStats({
   return (
     <div className="flex flex-col w-80 gap-2 border-solid border-2 border-sky-950 p-4 rounded-lg">
       <p>{`Stream Name: ${streamName}`}</p>
-      <p>{`Active: ${true}`} </p>
-      <p>{`Connection: ${true}`}</p>
-      <p>{`Current Bit Rate: ${3000} kbps`}</p>
+      <p>{`Active: ${active}`} </p>
+      <p>{`Connection: ${connection}`}</p>
+      <p>{`Current Bit Rate: ${current_bitrate} kbps`}</p>
       <p>{`Resolution: ${resolution}`}</p>
       <p>{`Average FPS: ${avg_fps}`}</p>
 
@@ -48,7 +54,8 @@ export default function PipelineStats({
         {recording ? "Stop Recording" : "Start Recording"}
       </button>
       <div className="mt-2">
-        <h1>{`Record Name: ${name}`}</h1>
+        {/* {//if name is not set, then display the name of the recording} */}
+        <h1>{`Record Name: ${name ? name : recordName}`}</h1>
         <label htmlFor="name"></label>
         <input
           className={
@@ -77,9 +84,8 @@ export default function PipelineStats({
         </button>
       </div>
 
-      <h1>Recording Statistics:</h1>
-      <p>Record Duration:</p>
-      <p>Record Start:</p>
+      <p>Record Duration: {`${recordDuration}`}</p>
+      <p>Record Start: {`${recordDate}`}</p>
     </div>
   );
 }

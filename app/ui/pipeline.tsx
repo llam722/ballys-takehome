@@ -5,6 +5,7 @@ import {
   // getPipelineNames,
   database,
   DataType,
+  pipelineStatistics,
   // streamRecordCheck,
 } from "../lib/data";
 
@@ -16,19 +17,38 @@ export default async function Pipeline() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg: grid-col-3 2xl:grid-cols-4 gap-4 md:gap-8">
-      {pipelineStatistics.map((pipeline: DataType, i: number): JSX.Element => {
-        return (
-          <PipelineStats
-            key={i}
-            streamName={pipeline.streamName}
-            resolution={pipeline.resolution}
-            avg_fps={pipeline.avg_fps}
-            recordName={pipeline.recordName}
-            recordDuration={pipeline.recordDuration}
-            recordStart={pipeline.recordStart}
-          />
-        );
-      })}
+      {pipelineStatistics.map(
+        (pipeline: pipelineStatistics, i: number): JSX.Element => {
+          const {
+            streamName,
+            active,
+            connection,
+            current_bitrate,
+            resolution,
+            avg_fps,
+            isRecording,
+            recordName,
+            recordDuration,
+            recordStart,
+          } = pipeline;
+
+          return (
+            <PipelineStats
+              key={i}
+              streamName={streamName}
+              active={active}
+              connection={connection}
+              current_bitrate={current_bitrate}
+              resolution={resolution}
+              avg_fps={avg_fps}
+              isRecording={isRecording}
+              recordName={recordName}
+              recordDuration={recordDuration}
+              recordStart={recordStart}
+            />
+          );
+        }
+      )}
     </div>
   );
 }
