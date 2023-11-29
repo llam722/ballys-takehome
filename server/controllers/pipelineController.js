@@ -1,3 +1,5 @@
+const { get } = require("http");
+
 const pipelineController = {
 
   getPipelineNames: async (req, res, next) => {
@@ -74,11 +76,8 @@ const pipelineController = {
     const activePipelines = res.locals.activePipelineArray;
     
     for (const pipeline of activePipelines) {
-      
-      const { id, streamName, active, connection, current_bitrate, resolution, avg_fps } = pipeline;
-  
+      const {streamName} = pipeline;
       try {
-    
         //mocked database to to emulate the api response
         const response = await fetch('http://localhost:3000/recordStatsDB.json');
         // const response = await fetch(`http://videoserver.com/api/streamRecorders/${streamName}`)
@@ -108,7 +107,50 @@ const pipelineController = {
     }
   res.locals.pipelineStatsArray = pipelineStatsArray;
   return next();
-}
+  },
+
+  checkActivePipe: async (req, res, next) => {
+
+    const response = await (fetch('http://localhost:3000/pipelineDB.json'));
+    const data = await response.json()
+
+    for (let i = 0; i < data.length; i++) {
+
+      if (data[i].streamName === req.body.streamName) {
+        data[i].active = req.body.active;
+        res.locals.hi = data[i];
+      }
+    }
+    
+    return next()
+  },
+
+  getNewActivePipe: async (req, res, next) => {
+    const first = res.locals.hi
+    try {
+      if (first.active === true) {
+  
+        const response = await fetch('http://localhost:3000/recordStatsDB.json')
+        const data = await response.json();
+    
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].streamName === req.body.streamName) {
+            data[i].active = req.body.active;
+            res.locals.pipeline = Object.assign(first, data[i]);
+          }
+        }
+      } else {
+        res.locals.pipeline = first;
+      }
+
+    } catch (error) {
+      console.log('Pipeline stats error for stream:', first.streamName, error);
+      res.send(`Failed to check recording stats for newly activated pipeline`)
+    }
+    return next()
+  },
+
+
 };
 
 

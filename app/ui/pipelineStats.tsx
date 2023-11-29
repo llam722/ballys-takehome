@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { pipelineStatistics } from "../lib/types";
 import { millisecondsToMinutes } from "../lib/utils";
+import { limiter } from "../lib/utils";
 
 export default function PipelineStats({
   id,
@@ -31,16 +32,47 @@ export default function PipelineStats({
       if (window.confirm("Stop this pipeline?")) {
         setRecording(false);
         setActivePipeline(false);
+        console.log("Pipeline stopped");
+
+        //  patch request to send to videoserver to stop pipeline
+        fetch(`http://localhost:3000/view/?id=${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: id,
+            streamName: streamName,
+            active: false,
+          }),
+        }).then((res) => res.json()
+          .then((data) => {
+            setRecording(data.isRecording)
+            recordDuration = data.recordDuration;
+            recordDate = new Date(data.recordStart)
+          }))
       }
-      //  patch request to send to videoserver to stop recording
-      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"})
+
     } else {
       setActivePipeline(true);
-      if (recording === true) {
-        setRecording(false);
+      console.log('Pipeline started')
+      
+      //  patch request to send to videoserver to start pipeline
+      fetch(`http://localhost:3000/view/?id=${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+          streamName: streamName,
+          active: true,
+        }),
+      })
+      
+      if (recording === false) {
+        setRecording(true);
       }
-      //  patch request to send to videoserver to start recording
-      // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"});
     }
   };
 
@@ -51,7 +83,7 @@ export default function PipelineStats({
       <h1>{`Database Id: ${id}`}</h1>
       <div className="border-solid border-stone-400 border" />
       <p>{`Stream Name: ${streamName}`}</p>
-      <p>{`Active: ${active}`} </p>
+      <p>{`Active: ${activePipeline}`} </p>
       <p>{`Connection: ${connection}`}</p>
       <p>{`Current Bit Rate: ${current_bitrate} kbps`}</p>
       <p>{`Resolution: ${resolution}`}</p>

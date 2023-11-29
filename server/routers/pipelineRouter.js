@@ -5,11 +5,11 @@ const router = express.Router();
 
 
 router.get('/', pipelineController.getPipelineNames, pipelineController.activePipelineCheck, pipelineController.streamRecordCheck, (req, res) => {
-  res.json(res.locals.pipelineStatsArray);
+  res.status(200).json(res.locals.pipelineStatsArray);
 });
 
-router.get('/', pipelineController.activePipelineCheck, (req, res, next) => {
-  res.json(res.locals.activePipeline)
-})
+router.patch('/', pipelineController.checkActivePipe, pipelineController.getNewActivePipe, (req, res) => {
+  res.json(res.locals.hi);
+});
 
 module.exports = router;
