@@ -19,24 +19,33 @@ export default function PipelineStats({
 }: pipelineStatistics) {
   const [disableButton, setDisableButton] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  const [recording, setRecording] = useState<boolean>(isRecording);
+  const [recording, setRecording] = useState<boolean>(false);
+  const [activePipeline, setActivePipeline] = useState<boolean>(active);
 
-  const recordDate = new Date(recordStart);
+  let recordDate;
+   recordStart ? recordDate = new Date(recordStart) : recordDate = '';
+    
 
   //handles the record button state toggle
-  const handleRecordClick = () => {
-    if (recording) {
-      if (window.confirm("Stop this recording?")) setRecording(false);
+  const handlePipelineClick = () => {
+    if (activePipeline) {
+      if (window.confirm("Stop this pipeline?")) {
+        setRecording(false);
+        setActivePipeline(false);
+      }
       //  patch request to send to videoserver to stop recording
       // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"})
     } else {
-      setRecording(true);
+      if (active && recording === false) {
+        setActivePipeline(true);
+        setRecording(true)
+      };
       //  patch request to send to videoserver to start recording
       // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"});
     }
   };
 
-  const recordColor = recording ? "bg-red-700" : "bg-green-700";
+  const pipelineColor = activePipeline ? "bg-red-700" : "bg-green-700";
 
   return (
     <div className="flex flex-col w-80 gap-2 border-solid border-2 border-sky-950 p-4 rounded-lg">
@@ -52,14 +61,14 @@ export default function PipelineStats({
       <div className="border-solid border-stone-400 border" />
 
       <button
-        className={`${recordColor} text-white rounded-lg p-2 mt-4`}
-        onClick={handleRecordClick}
+        className={`${pipelineColor} text-white rounded-lg p-2 mt-4`}
+        onClick={handlePipelineClick}
       >
-        <p>{`Recording: ${recording ? "ON" : "OFF"}`}</p>
-        {recording ? "Stop Recording" : "Start Recording"}
+        {activePipeline ? "Stop Pipeline" : "Start Pipeline"}
       </button>
       <div className="mt-2">
         {/* {//if name is not set, then display the name of the recording} */}
+        <p>{`Recording: ${recording ? "ON" : "OFF"}`}</p>
         <h1>{`Record Name: ${name ? name : recordName}`}</h1>
         <label htmlFor="name"></label>
         <input
@@ -89,8 +98,11 @@ export default function PipelineStats({
         </button>
       </div>
 
-      <p>Record Duration: {`${millisecondsToMinutes(recordDuration)}`}</p>
-      <p>Record Start: {`${recordDate}`}</p>
+      <p>
+        Record Duration:{" "}
+        {`${millisecondsToMinutes(recordDuration ? recordDuration : 0)}`}
+      </p>
+      <p>Record Start: {recordDate.toString()}</p>
     </div>
   );
 }

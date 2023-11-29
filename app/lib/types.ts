@@ -31,8 +31,8 @@ export interface pipelineStatistics {
   current_bitrate: number;
   resolution: string;
   avg_fps: number;
-  isRecording: boolean;
-  recordName: string;
-  recordDuration: number;
-  recordStart: Date;
+  isRecording?: boolean;
+  recordName?: string;
+  recordDuration?: number;
+  recordStart?: string;
 }

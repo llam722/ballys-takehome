@@ -8,4 +8,8 @@ router.get('/', pipelineController.getPipelineNames, pipelineController.activePi
   res.json(res.locals.pipelineStatsArray);
 });
 
+router.get('/', pipelineController.activePipelineCheck, (req, res, next) => {
+  res.json(res.locals.activePipeline)
+})
+
 module.exports = router;
