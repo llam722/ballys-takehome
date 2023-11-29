@@ -23,6 +23,9 @@ export default async function Pipeline() {
             streamName={pipeline.streamName}
             resolution={pipeline.resolution}
             avg_fps={pipeline.avg_fps}
+            recordName={pipeline.recordName}
+            recordDuration={pipeline.recordDuration}
+            recordStart={pipeline.recordStart}
           />
         );
       })}

@@ -2,18 +2,18 @@
 
 import { Headers } from "node-fetch";
 import { FormEvent, SyntheticEvent, useState } from "react";
+import { pipelineStatistics } from "../lib/data";
 
 export default function PipelineStats({
   streamName,
   resolution,
   avg_fps,
-}: {
-  streamName: string;
-  resolution: string;
-  avg_fps: number;
-}) {
+  recordName,
+  recordDuration,
+  recordStart,
+}: pipelineStatistics) {
   const [disableButton, setDisableButton] = useState<boolean>(false);
-  const [recordName, setRecordName] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [recording, setRecording] = useState<boolean>(false);
 
   //handles the record button state toggle
@@ -31,22 +31,38 @@ export default function PipelineStats({
 
   return (
     <div className="flex flex-col w-80 gap-2 border-solid border-2 border-sky-950 p-4 rounded-lg">
-      <div>
-        <h1>{`Record Name: ${recordName}`}</h1>
-        <label htmlFor="recordName"></label>
+      <p>{`Stream Name: ${streamName}`}</p>
+      <p>{`Active: ${true}`} </p>
+      <p>{`Connection: ${true}`}</p>
+      <p>{`Current Bit Rate: ${3000} kbps`}</p>
+      <p>{`Resolution: ${resolution}`}</p>
+      <p>{`Average FPS: ${avg_fps}`}</p>
+
+      <div className="border-solid border-stone-400 border" />
+
+      <button
+        className={`${recordColor} text-white rounded-lg p-2 mt-4`}
+        onClick={handleRecordClick}
+      >
+        <p>{`Recording: ${recording ? "ON" : "OFF"}`}</p>
+        {recording ? "Stop Recording" : "Start Recording"}
+      </button>
+      <div className="mt-2">
+        <h1>{`Record Name: ${name}`}</h1>
+        <label htmlFor="name"></label>
         <input
           className={
             disableButton
               ? "hidden"
               : "border-solid border-2 border-sky-950 rounded-lg p-[.2rem]"
           }
-          id="recordName"
+          id="name"
           placeholder="Set name..."
           type="text"
-          value={recordName}
+          value={name}
           onChange={(e) => {
             e.preventDefault();
-            setRecordName(e.target.value);
+            setName(e.target.value);
           }}
         />
         <button
@@ -61,25 +77,9 @@ export default function PipelineStats({
         </button>
       </div>
 
-      <p>{`Stream Name: ${streamName}`}</p>
-      <p>{`Active: ${true}`} </p>
-      <p>{`Connection: ${true}`}</p>
-      <p>{`Current Bit Rate: ${3000} kbps`}</p>
-      <p>{`Resolution: ${resolution}`}</p>
-      <p>{`Average FPS: ${avg_fps}`}</p>
-
-      <button
-        className={`${recordColor} text-white rounded-lg p-2 mt-4`}
-        onClick={handleRecordClick}
-      >
-        <p>{`Recording: ${recording ? "ON" : "OFF"}`}</p>
-        {recording ? "Stop Recording" : "Start Recording"}
-      </button>
-      <div>
-        <h1>Recording Statistics:</h1>
-        <p>Record Duration:</p>
-        <p>Record Start:</p>
-      </div>
+      <h1>Recording Statistics:</h1>
+      <p>Record Duration:</p>
+      <p>Record Start:</p>
     </div>
   );
 }

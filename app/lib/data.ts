@@ -23,6 +23,20 @@ export interface database {
   pipeline_id: number;
 }
 
+export interface pipelineStatistics {
+  id: number;
+  streamName: string;
+  active: boolean;
+  connection: boolean;
+  current_bitrate: number;
+  resolution: string;
+  avg_fps: number;
+  isRecording: boolean;
+  recordName: string;
+  recordDuration: number;
+  recordStart: Date;
+}
+
 // //iterate through the database to retrieve the names of the pipelines in an array
 // // query each of the names to see if they are active, if so return true
 // export async function getPipelineNames(): Promise<string[]> {
