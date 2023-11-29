@@ -127,6 +127,7 @@ const pipelineController = {
 
   getNewActivePipe: async (req, res, next) => {
     const first = res.locals.hi
+    console.log('RATE LIMITED')
     try {
       if (first.active === true) {
   
