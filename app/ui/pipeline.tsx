@@ -1,5 +1,5 @@
 import PipelineStats from "@/app/ui/pipelineStats";
-import { pipelineStatistics } from "../lib/data";
+import { pipelineStatistics } from "../lib/types";
 
 export default async function Pipeline() {
   //retrieves the pipeline names from the Database
