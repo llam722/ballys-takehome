@@ -1,3 +1,4 @@
+import Bottleneck from 'bottleneck';
 
 export function millisecondsToMinutes(milliseconds: number) {
   const minutes = Math.floor(milliseconds / 60000);
@@ -7,26 +8,19 @@ export function millisecondsToMinutes(milliseconds: number) {
 }
 
 
-export function debounce(callback: any, delay: number) {
-  let timer: any;
+//limiter to prevent too many requests to the API
 
-  return (...args: any) => {
-    return new Promise((resolve, reject) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        try {
-          let output = callback(...args);
-          resolve(output);
-        } catch (err){
-          reject(err);
-        }
-      })
-    })
-}
-}
-
-
-export function queue(func: () => Promise<any>, delay: number) {
-  let functionQueue: (() => Promise<any>)[] = [];
-  let waiting = true;
-}
+export const limiter = new Bottleneck({
+  //maximum amount of requests that can run concurrently
+  maxConcurrent: 5,
+  //minimum time to wait between each request
+  minTime: 200,
+  // How many jobs can be executed before the limiter stops executing jobs. If `reservoir` reaches `0`, no jobs will be executed until it is no longer `0`. New jobs will still be queued up.
+  reservoir: 5,
+  // The increment applied to `reservoir` when `reservoirIncreaseInterval` is in use.
+  reservoirIncreaseAmount: 5,
+  //Every `reservoirIncreaseInterval` milliseconds, the `reservoir` value will be automatically incremented by `reservoirIncreaseAmount`
+  reservoirIncreaseInterval: 1000,
+  //The maximum value that `reservoir` can reach when `reservoirIncreaseInterval` is in use.
+  reservoirIncreaseMaximum: 5,
+});
