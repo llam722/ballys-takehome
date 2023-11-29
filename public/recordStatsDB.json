@@ -5,5 +5,54 @@
 "recordName": "sample_record",
 "recordDuration": "7213025",
 "recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager13",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager14",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager15",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager16",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager17",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager18",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
+},
+{
+"streamName": "eastPackager19",
+"isRecording": true,
+"recordName": "sample_record",
+"recordDuration": "7213025",
+"recordStart": "2023-09-10T23:00:00Z"
 }
 ]

@@ -1,50 +1,51 @@
 import PipelineStats from "@/app/ui/pipelineStats";
-import {
-  PipelineStatsType,
-  activePipelineCheck,
-  getPipelineNames,
-  database,
-  DataType,
-  streamRecordCheck,
-} from "../lib/data";
+import { pipelineStatistics } from "../lib/types";
+import { limiter } from "../lib/utils";
 
 export default async function Pipeline() {
   //retrieves the pipeline names from the Database
-  const pipelineNames = await getPipelineNames();
-  //retrieves the active pipelines from the Database, along with other info
-  const pipelineData = await activePipelineCheck(pipelineNames);
-  //filters the active pipelines names in an array to minimize request size
-  const activePipelines: string[] = pipelineData.map(
-    (pipeline: DataType[]) => pipeline[0].streamName
-  );
-  // console.log(pipelineData, 'pipelineData')
-  const pipelineStats = await streamRecordCheck(activePipelines);
-  console.log(pipelineStats, 'pipelineStats')
+  const pipeline = await fetch("http:localhost:3000/view")
+  const pipelineStatistics = await pipeline.json();
 
+  // console.log(pipelineStatistics, 'pipelineStatistics')
 
-  // const { active, connection, current_bitrate, resolution, avg_fps }
-  //   = pipelineData;
-
-  // const {
-  //   streamName,
-  //   isRecording,
-  //   recordName,
-  //   recordDuration,
-  //   recordStart,
-  // } = pipelineStats;
-
-  // console.log(active, connection, current_bitrate, resolution, avg_fps, 'pipelineData')
-  // console.log(streamName, isRecording, recordName, recordDuration, recordStart, 'pipelineStats')
+  
 
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg: grid-col-3 2xl:grid-cols-4 gap-4 md:gap-8">
+      {pipelineStatistics.map((pipeline: pipelineStatistics): JSX.Element => {
+        const {
+          id,
+          streamName,
+          active,
+          connection,
+          current_bitrate,
+          resolution,
+          avg_fps,
+          isRecording,
+          recordName,
+          recordDuration,
+          recordStart,
+        } = pipeline;
 
-      {pipelineData.map((pipeline: DataType[], i: number): JSX.Element => {
-        return <PipelineStats key={i} streamName={pipeline[i].streamName} />;
+        return (
+          <PipelineStats
+            key={id}
+            id={id}
+            streamName={streamName}
+            active={active}
+            connection={connection}
+            current_bitrate={current_bitrate}
+            resolution={resolution}
+            avg_fps={avg_fps}
+            isRecording={isRecording}
+            recordName={recordName}
+            recordDuration={recordDuration}
+            recordStart={recordStart}
+          />
+        );
       })}
     </div>
   );
 }
-
-
