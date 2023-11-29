@@ -23,7 +23,7 @@ export default function PipelineStats({
   const [activePipeline, setActivePipeline] = useState<boolean>(active);
 
   let recordDate;
-  recordStart ? recordDate = new Date(recordStart) : recordDate = '';
+  recordStart ? (recordDate = new Date(recordStart)) : (recordDate = "");
 
   //handles the record button state toggle
   const handlePipelineClick = () => {
@@ -37,13 +37,12 @@ export default function PipelineStats({
     } else {
       setActivePipeline(true);
       if (recording === true) {
-        setRecording(false)
-      };
+        setRecording(false);
+      }
       //  patch request to send to videoserver to start recording
       // fetch(`/api/videoserver.com/api/incomingstreams/${streamName}`, {method: "PATCH"});
     }
   };
-
 
   const pipelineColor = activePipeline ? "bg-red-700" : "bg-green-700";
 

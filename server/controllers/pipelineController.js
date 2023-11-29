@@ -91,23 +91,13 @@ const pipelineController = {
         const data = await response.json();
 
         for (let i = 0; i < data.length; i++) {
-          if (data[i].streamName === streamName) {
+          if (data[i].streamName === streamName && pipeline.active === true) {
+              
+              const pipelineStats = Object.assign(pipeline, data[i]);
+              pipelineStatsArray.push(pipelineStats);
 
-            const { isRecording, recordName, recordDuration, recordStart } = data[i];
-            const pipelineStats = {
-              id,
-              streamName,
-              active,
-              connection,
-              current_bitrate,
-              resolution,
-              avg_fps,
-              isRecording,
-              recordName,
-              recordDuration,
-              recordStart
-            };
-            pipelineStatsArray.push(pipelineStats);
+            } else if (data[i].streamName === streamName && pipeline.active === false) {
+            pipelineStatsArray.push(pipeline);
           }
         }
 
