@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { pipelineStatistics } from "../lib/types";
+import { millisecondsToMinutes } from "../lib/utils";
 
 export default function PipelineStats({
   id,
@@ -86,7 +87,7 @@ export default function PipelineStats({
         </button>
       </div>
 
-      <p>Record Duration: {`${recordDuration}`}</p>
+      <p>Record Duration: {`${millisecondsToMinutes(recordDuration)}`}</p>
       <p>Record Start: {`${recordDate}`}</p>
     </div>
   );
