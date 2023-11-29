@@ -7,12 +7,11 @@ const pipelineController = {
     const data = await response.json();
     //create an array to store the names of the pipelines
     const pipelineNames = [];
-    //regex to remove white spacing
+    //regex to remove spaces
     const regex = /\s/g;
 
     for (let i = 0; i < data.length; i++) {
-      //name in database doesn't match the name in streamNames, so need to modify for consistency
-      //converts all pipeline names to lowercase for consistency and remove white spacing
+      //name in database doesn't match the name in streamNames, so need to modify to lowercase and remove white spacing for consistency
       const name = data[i].name.toLowerCase().replaceAll(regex, '');
       pipelineNames.push([name, data[i].id]);
     }
@@ -29,7 +28,8 @@ const pipelineController = {
   activePipelineCheck: async (req, res, next) => {
     const activePipelineArray = [];
     
-    const pipelineNames  = res.locals.pipelineNames;
+    const pipelineNames = res.locals.pipelineNames;
+
   // considerations: create an array to keep count of how many pipelines are in the queue
   // question to note: do all the pipelines return data at different times?
   // if so, we can use a queue method, but a longer load would block the shorter loads in parallel?

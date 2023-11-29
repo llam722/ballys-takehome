@@ -3,9 +3,9 @@ import { pipelineStatistics } from "../lib/types";
 
 export default async function Pipeline() {
   //retrieves the pipeline names from the Database
-  const pipelineStatistics = await fetch("http:localhost:3000/view").then(
-    (res) => res.json()
-  );
+  const pipeline = await fetch("http:localhost:3000/view")
+  const pipelineStatistics = await pipeline.json();
+  
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg: grid-col-3 2xl:grid-cols-4 gap-4 md:gap-8">
