@@ -25,9 +25,6 @@ export default function PipelineStats({
   const [recordingDuration, setRecordingDuration] = useState<any>(recordDuration);
   const [recordDate, setRecordDate] = useState<any>(recordStart);
 
-  // let recordDate;
-  // recordStart ? (recordDate = new Date(recordStart)) : (recordDate = "");
-
   useEffect(() => {
 
    }, [activePipeline])
