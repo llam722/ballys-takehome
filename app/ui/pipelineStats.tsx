@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { pipelineStatistics } from "../lib/types";
 import { millisecondsToMinutes } from "../lib/utils";
 import { limiter } from "../lib/utils";
@@ -22,9 +22,15 @@ export default function PipelineStats({
   const [name, setName] = useState<string>("");
   const [recording, setRecording] = useState<boolean>(isRecording);
   const [activePipeline, setActivePipeline] = useState<boolean>(active);
+  const [recordingDuration, setRecordingDuration] = useState<any>(recordDuration);
+  const [recordDate, setRecordDate] = useState<any>(recordStart);
 
-  let recordDate;
-  recordStart ? (recordDate = new Date(recordStart)) : (recordDate = "");
+  // let recordDate;
+  // recordStart ? (recordDate = new Date(recordStart)) : (recordDate = "");
+
+  useEffect(() => {
+
+   }, [activePipeline])
 
   //handles the record button state toggle
   const handlePipelineClick = () => {
@@ -45,12 +51,7 @@ export default function PipelineStats({
             streamName: streamName,
             active: false,
           }),
-        }).then((res) => res.json()
-          .then((data) => {
-            setRecording(data.isRecording)
-            recordDuration = data.recordDuration;
-            recordDate = new Date(data.recordStart)
-          }))
+        })
       }
 
     } else {
@@ -68,7 +69,13 @@ export default function PipelineStats({
           streamName: streamName,
           active: true,
         }),
-      })
+      }).then((res) =>
+        res.json().then((data) => {
+          setRecording(data.isRecording);
+          setRecordingDuration(data.recordDuration);
+          setRecordDate(new Date(data.recordStart));
+        })
+      );
       
       if (recording === false) {
         setRecording(true);
@@ -131,9 +138,9 @@ export default function PipelineStats({
 
       <p>
         Record Duration:{" "}
-        {`${millisecondsToMinutes(recordDuration ? recordDuration : 0)}`}
+        {`${millisecondsToMinutes(recordingDuration ? recordingDuration : 0)}`}
       </p>
-      <p>Record Start: {recordDate.toString()}</p>
+      <p>Record Start: {recordDate ? recordDate.toString(): ''}</p>
     </div>
   );
 }

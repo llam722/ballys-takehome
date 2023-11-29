@@ -9,7 +9,7 @@ router.get('/', pipelineController.getPipelineNames, pipelineController.activePi
 });
 
 router.patch('/', pipelineController.checkActivePipe, pipelineController.getNewActivePipe, (req, res) => {
-  res.json(res.locals.hi);
+  res.status(200).json(res.locals.pipeline);
 });
 
 module.exports = router;
