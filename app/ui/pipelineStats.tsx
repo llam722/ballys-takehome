@@ -35,7 +35,7 @@ export default function PipelineStats({
   //handles the record button state toggle
   const handlePipelineClick = () => {
     if (activePipeline) {
-      // if (window.confirm("Stop this pipeline?")) {
+      if (window.confirm("Stop this pipeline?")) {
         setRecording(false);
         setActivePipeline(false);
         console.log("Pipeline stopped");
@@ -52,7 +52,7 @@ export default function PipelineStats({
             active: false,
           }),
         }))
-      // }
+      }
 
     } else {
       setActivePipeline(true);
