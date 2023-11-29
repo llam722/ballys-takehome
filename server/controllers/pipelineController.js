@@ -1,5 +1,3 @@
-const { pipeline } = require("stream");
-
 const pipelineController = {
 
   getPipelineNames: async (req, res, next) => {

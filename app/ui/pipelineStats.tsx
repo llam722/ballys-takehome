@@ -1,7 +1,6 @@
 "use client";
 
-import { Headers } from "node-fetch";
-import { FormEvent, SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import { pipelineStatistics } from "../lib/types";
 
 export default function PipelineStats({
