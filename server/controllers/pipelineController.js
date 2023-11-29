@@ -30,11 +30,6 @@ const pipelineController = {
     
     const pipelineNames = res.locals.pipelineNames;
 
-  // considerations: create an array to keep count of how many pipelines are in the queue
-  // question to note: do all the pipelines return data at different times?
-  // if so, we can use a queue method, but a longer load would block the shorter loads in parallel?
-  //else you can keep slicing the array and querying the pipelines in parallel, but would need feedback from the server to know when the querying is done (before 200ms)
-
     for (const name of pipelineNames) {
     //streamNames do not have white spacing, so no need to remove white spacing with regex
       const streamName = name[0].toLowerCase();
