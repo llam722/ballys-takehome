@@ -20,6 +20,7 @@ export default async function Pipeline() {
       {pipelineStatistics.map(
         (pipeline: pipelineStatistics, i: number): JSX.Element => {
           const {
+            id,
             streamName,
             active,
             connection,
@@ -34,7 +35,8 @@ export default async function Pipeline() {
 
           return (
             <PipelineStats
-              key={i}
+              key={id}
+              databaseId={id}
               streamName={streamName}
               active={active}
               connection={connection}

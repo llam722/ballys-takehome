@@ -16,7 +16,7 @@ const pipelineController = {
       //name in database doesn't match the name in streamNames, so need to modify for consistency
       //converts all pipeline names to lowercase for consistency and remove white spacing
       const name = data[i].name.toLowerCase().replaceAll(regex, '');
-      pipelineNames.push(name);
+      pipelineNames.push([name, data[i].id]);
     }
     res.locals.pipelineNames = pipelineNames;
     //returns an array of pipeline names
@@ -38,9 +38,11 @@ const pipelineController = {
   // if so, we can use a queue method, but a longer load would block the shorter loads in parallel?
     //   else you can keep slicing the array and querying the pipelines in parallel, but would need feedback from the server to know when the querying is done (before 200ms)
 
-  for (const name of pipelineNames) {
+    for (const name of pipelineNames) {
     //streamNames do not have white spacing, so no need to remove white spacing with regex
-    const streamName = name.toLowerCase();
+      const streamName = name[0].toLowerCase();
+      // console.log(name)
+      const id = name[1];
     try {
         //mocked database to to emulate the api response
       const response = await fetch('http://localhost:3000/pipelineDB.json');
@@ -51,9 +53,15 @@ const pipelineController = {
           //continues to check the rest of the pipelines or can break if needed
           break;
         }
-        const data = await response.json();
-        if (data[0].streamName.toLowerCase() === streamName && data[0].active === true) activePipelineArray.push(...data);
+      const data = await response.json();
       
+      //cross references multiple pipelines from mock database
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].streamName.toLowerCase() === streamName && data[i].active === true) {
+          const newData = { id: id, ...data[i] }
+          activePipelineArray.push(newData);
+        }
+      }
         
       } catch (error) {
         console.log('Pipeline check error for stream:', streamName, error);
@@ -74,9 +82,9 @@ const pipelineController = {
     
     for (const pipeline of activePipelines) {
       
-      const { streamName, active, connection, current_bitrate, resolution, avg_fps } = pipeline;
+      const { id, streamName, active, connection, current_bitrate, resolution, avg_fps } = pipeline;
       
-      // console.log(streamName, active, connection, current_bitrate, resolution, avg_fps, 'here')
+      console.log(id, streamName, active, connection, current_bitrate, resolution, avg_fps, 'here')
   
       try {
     
@@ -89,18 +97,14 @@ const pipelineController = {
           //continues to check the rest of the pipelines for local db or can break if needed
           break;
         }
-        
         const data = await response.json();
-
-        // const dataMatch = data.find((pipeline) => pipeline.streamName === streamName);
-        // console.log(dataMatch, 'dataMatch')
 
         for (let i = 0; i < data.length; i++) {
           if (data[i].streamName === streamName) {
 
             const { isRecording, recordName, recordDuration, recordStart } = data[i];
-            //create a new template for the pipeline stats
             const pipelineStats = {
+              id,
               streamName,
               active,
               connection,
@@ -121,7 +125,6 @@ const pipelineController = {
       pipelineStatsArray.push(new Error(`Failed to check recording stats for pipeline ${streamName}, pipeline might not be active`));
     }
     }
-
   res.locals.pipelineStatsArray = pipelineStatsArray;
   return next();
 }
