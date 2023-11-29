@@ -1,5 +1,6 @@
 import Bottleneck from 'bottleneck';
 
+//function to convert milliseconds to minutes and seconds
 export function millisecondsToMinutes(milliseconds: number) {
   const minutes = Math.floor(milliseconds / 60000);
   const seconds = ((milliseconds % 60000) / 1000).toFixed(0);

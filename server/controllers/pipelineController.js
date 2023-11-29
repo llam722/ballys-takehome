@@ -110,7 +110,7 @@ const pipelineController = {
   },
 
   checkActivePipe: async (req, res, next) => {
-
+    //alters state of pipeline to active or inactive
     const response = await (fetch('http://localhost:3000/pipelineDB.json'));
     const data = await response.json()
 
@@ -118,7 +118,7 @@ const pipelineController = {
 
       if (data[i].streamName === req.body.streamName) {
         data[i].active = req.body.active;
-        res.locals.hi = data[i];
+        res.locals.stats = data[i];
       }
     }
     
@@ -126,9 +126,10 @@ const pipelineController = {
   },
 
   getNewActivePipe: async (req, res, next) => {
-    const first = res.locals.hi
-    console.log('RATE LIMITED')
+    const first = res.locals.stats
+    console.log('API REQUEST SENT')
     try {
+      //only need to check if the pipeline is active and not disabled from prev middleware
       if (first.active === true) {
   
         const response = await fetch('http://localhost:3000/recordStatsDB.json')
