@@ -4,7 +4,7 @@
 "active": true,
 "connection": true,
 "current_bitrate": "3000",
-"resolution": "1080p",
+"resolution": "1440p",
 "avg_fps": "59.97"
 },
   {
@@ -13,6 +13,54 @@
 "connection": true,
 "current_bitrate": "3000",
 "resolution": "1080p",
+"avg_fps": "239.97"
+},
+  {
+"streamName": "eastPackager14",
+"active": true,
+"connection": true,
+"current_bitrate": "3000",
+"resolution": "1080p",
+"avg_fps": "59.97"
+},
+  {
+"streamName": "eastPackager15",
+"active": false,
+"connection": true,
+"current_bitrate": "3000",
+"resolution": "1080p",
+"avg_fps": "59.97"
+},
+  {
+"streamName": "eastPackager16",
+"active": true,
+"connection": true,
+"current_bitrate": "3000",
+"resolution": "1080p",
+"avg_fps": "59.97"
+},
+  {
+"streamName": "eastPackager17",
+"active": true,
+"connection": true,
+"current_bitrate": "3000",
+"resolution": "1080p",
+"avg_fps": "239.97"
+},
+  {
+"streamName": "eastPackager18",
+"active": true,
+"connection": true,
+"current_bitrate": "3000",
+"resolution": "1080p",
+"avg_fps": "59.97"
+},
+  {
+"streamName": "eastPackager19",
+"active": false,
+"connection": true,
+"current_bitrate": "3000",
+"resolution": "1440p",
 "avg_fps": "59.97"
 }
 ]
