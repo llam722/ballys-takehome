@@ -5,7 +5,7 @@ import { FormEvent, SyntheticEvent, useState } from "react";
 import { pipelineStatistics } from "../lib/data";
 
 export default function PipelineStats({
-  databaseId,
+  id,
   streamName,
   active,
   connection,
@@ -38,7 +38,7 @@ export default function PipelineStats({
 
   return (
     <div className="flex flex-col w-80 gap-2 border-solid border-2 border-sky-950 p-4 rounded-lg">
-      <h1>{`Database Id: ${databaseId}`}</h1>
+      <h1>{`Database Id: ${id}`}</h1>
       <div className="border-solid border-stone-400 border" />
       <p>{`Stream Name: ${streamName}`}</p>
       <p>{`Active: ${active}`} </p>

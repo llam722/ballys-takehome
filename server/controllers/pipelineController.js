@@ -83,8 +83,6 @@ const pipelineController = {
     for (const pipeline of activePipelines) {
       
       const { id, streamName, active, connection, current_bitrate, resolution, avg_fps } = pipeline;
-      
-      console.log(id, streamName, active, connection, current_bitrate, resolution, avg_fps, 'here')
   
       try {
     
@@ -128,9 +126,7 @@ const pipelineController = {
   res.locals.pipelineStatsArray = pipelineStatsArray;
   return next();
 }
-
 };
-
 
 
 module.exports = pipelineController;

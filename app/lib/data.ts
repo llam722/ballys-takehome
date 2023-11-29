@@ -24,7 +24,7 @@ export interface database {
 }
 
 export interface pipelineStatistics {
-  databaseId: number;
+  id: number;
   streamName: string;
   active: boolean;
   connection: boolean;
