@@ -15,7 +15,7 @@ export interface PipelineStatsType {
   recordStart: Date;
 }
 
-export interface database {
+export interface Database {
   id: number;
   name: string;
   server_id: number;
@@ -23,7 +23,7 @@ export interface database {
   pipeline_id: number;
 }
 
-export interface pipelineStatistics {
+export interface PipelineStatistics {
   id: number;
   streamName: string;
   active: boolean;
