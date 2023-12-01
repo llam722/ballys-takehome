@@ -11,6 +11,7 @@ export default async function Pipeline() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg: grid-col-3 2xl:grid-cols-4 gap-4 md:gap-8">
       {pipelineStatistics.map((pipeline: PipelineStatistics): JSX.Element => {
+        
         const {
           id,
           streamName,

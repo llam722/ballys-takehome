@@ -83,7 +83,7 @@ export default function PipelineStats({
   const pipelineColor = activePipeline ? "bg-red-700" : "bg-green-700";
 
   return (
-    <div className="flex flex-col w-80 gap-2 border-solid border-2 border-sky-950 p-4 rounded-lg">
+    <div className="flex flex-col w-82 gap-2 border-solid border-2 border-sky-950 p-4 rounded-lg">
       <h1>{`Database Id: ${id}`}</h1>
       <div className="border-solid border-stone-400 border" />
       <p>{`Stream Name: ${streamName}`}</p>
