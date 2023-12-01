@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { pipelineStatistics } from "../lib/types";
+import { PipelineStatistics } from "../lib/types";
 import { millisecondsToMinutes } from "../lib/utils";
 import { limiter } from "../lib/utils";
 
@@ -17,7 +17,7 @@ export default function PipelineStats({
   recordDuration,
   recordStart,
   isRecording,
-}: pipelineStatistics) {
+}: PipelineStatistics) {
   const [disableButton, setDisableButton] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [recording, setRecording] = useState<boolean>(isRecording);

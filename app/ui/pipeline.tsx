@@ -1,5 +1,5 @@
 import PipelineStats from "@/app/ui/pipelineStats";
-import { pipelineStatistics } from "../lib/types";
+import { PipelineStatistics } from "../lib/types";
 import { limiter } from "../lib/utils";
 
 export default async function Pipeline() {
@@ -10,7 +10,7 @@ export default async function Pipeline() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg: grid-col-3 2xl:grid-cols-4 gap-4 md:gap-8">
-      {pipelineStatistics.map((pipeline: pipelineStatistics): JSX.Element => {
+      {pipelineStatistics.map((pipeline: PipelineStatistics): JSX.Element => {
         const {
           id,
           streamName,
